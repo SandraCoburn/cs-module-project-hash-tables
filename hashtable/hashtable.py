@@ -25,11 +25,10 @@ class HashTable:
 
     Implement this.
     """
-
     def __init__(self, capacity):
         self.capacity = capacity
         self.data = [None] * capacity
-        print(self.data)
+        #print("this is data: ", self.data)
 
 
     def get_num_slots(self):
@@ -93,7 +92,7 @@ class HashTable:
         Take an arbitrary key and return a valid integer index
         between within the storage capacity of the hash table.
         """
-        return self.fnv1(key) % len(self.data)
+        return self.fnv1(key) % self.capacity
         #return self.djb2(key) % self.capacity
 
     def put(self, key, value):
@@ -116,7 +115,10 @@ class HashTable:
 
         Implement this.
         """
-        # Your code here
+        if self.data[self.hash_index(key)] is None:
+            return
+        else:
+            self.data[self.hash_index(key)] = None
 
 
     def get(self, key):
