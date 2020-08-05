@@ -6,12 +6,6 @@ class HashTableEntry:
         self.key = key
         self.value = value
         self.next = None
-    def get_key(self):
-        return self.key
-    def get_value(self):
-        return self.value
-    def set_next(self, new_next):
-        self.next = new_next
 
 
 # Hash table can't have fewer than this many slots
@@ -26,8 +20,10 @@ class HashTable:
     Implement this.
     """
     def __init__(self, capacity):
+        self.head = None
         self.capacity = capacity
         self.data = [None] * capacity
+        self.slots = 0
         #print("this is data: ", self.data)
 
 
@@ -42,7 +38,7 @@ class HashTable:
 
         Implement this.
         """
-        return len(self.data)
+        return self.slots/len(self.data)
 
 
     def get_load_factor(self):
@@ -85,6 +81,10 @@ class HashTable:
         Implement this, and/or FNV-1.
         """
         # Your code here
+        x = key[0] << 7
+        for chr in key[1:]:
+            x = ((100003 * x) ^ chr) & (1<<32)
+        return x
 
 
     def hash_index(self, key):
@@ -104,9 +104,26 @@ class HashTable:
         Implement this.
         """
         index = self.hash_index(key)
-        self.data[index] = HashTableEntry(key, value)
-
-
+        #entry = self.data[index]
+        #cur = self.head 
+        if self.data[index] is None:
+            self.data[index] = HashTableEntry(key, value)
+        else:
+            node = self.data[index]
+            while node is not None:
+                #check if key exists and overwrite
+                if node.key == key:
+                    node.value = value
+                    return
+                #check if there is next and assign
+                elif node.next:
+                    node = node.next 
+                #If none, create a new HashTable Entry for next node
+                else: 
+                    node.next = HashTableEntry(key, value)
+                    return
+        self.slots += 1
+      
     def delete(self, key):
         """
         Remove the value stored with the given key.
@@ -115,28 +132,44 @@ class HashTable:
 
         Implement this.
         """
-        if self.data[self.hash_index(key)] is None:
-            return
+        index = self.hash_index(key)   
+        node = self.data[index]
+        
+        if node is not None:   
+            #check that current key is equal to key 
+            if node.key == key:
+                if node.next is not None:
+                    node = node.next
+                else:
+                    self.data[index] = None      
+            else:
+                while node.next is not None:
+                    if node.next.key == key:
+                        node.next == None
+                    else:
+                        node = node.next   
+            self.slots -= 1        
         else:
-            self.data[self.hash_index(key)] = None
+            print("Key could not be found")
 
 
-    def get(self, key):
-        """
-        Retrieve the value stored with the given key.
-
-        Returns None if the key is not found.
-
-        Implement this.
-        """
+    def get(self,key):
         index = self.hash_index(key)
         #return self.data[index]
         if self.data[index] is not None:
-            return self.data[index].value
+            node = self.data[index]
+            
+            while node:
+                #check that key is the same
+                if node.key == key:
+                    return node.value
+                else:
+                    #If key is not the same, check next node
+                    node = node.next 
+        else:
+            return self.data[index]        
         return None
         
-
-
     def resize(self, new_capacity):
         """
         Changes the capacity of the hash table and
@@ -163,6 +196,7 @@ if __name__ == "__main__":
     ht.put("line_10", "Long time the manxome foe he sought--")
     ht.put("line_11", "So rested he by the Tumtum tree")
     ht.put("line_12", "And stood awhile in thought.")
+    ht.delete("line_6")
 
     print("")
 
