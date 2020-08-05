@@ -24,8 +24,8 @@ class HashTable:
         self.capacity = capacity
         self.data = [None] * capacity
         self.slots = 0
-        #print("this is data: ", self.data)
-
+       # print("this is data: ", self.data)
+        print("this is the head", self.head)
 
     def get_num_slots(self):
 
@@ -38,7 +38,7 @@ class HashTable:
 
         Implement this.
         """
-        return self.slots/len(self.data)
+        return len(self.data)
 
 
     def get_load_factor(self):
@@ -47,7 +47,8 @@ class HashTable:
 
         Implement this.
         """
-        # Your code here
+        load_factor = self.slots / self.capacity
+        return load_factor
 
 
     def fnv1(self, key):
@@ -132,25 +133,21 @@ class HashTable:
 
         Implement this.
         """
+    
         index = self.hash_index(key)   
         node = self.data[index]
-        
-        if node is not None:   
             #check that current key is equal to key 
+        while node:
             if node.key == key:
-                if node.next is not None:
-                    node = node.next
-                else:
-                    self.data[index] = None      
+                node.value = None
+                return
             else:
-                while node.next is not None:
-                    if node.next.key == key:
-                        node.next == None
-                    else:
-                        node = node.next   
-            self.slots -= 1        
-        else:
-            print("Key could not be found")
+                if node.next is not None:
+                    node = node.next  
+        self.slots -= 1        
+        return None 
+        # else:
+        #     print("Key could not be found")
 
 
     def get(self,key):
@@ -165,9 +162,7 @@ class HashTable:
                     return node.value
                 else:
                     #If key is not the same, check next node
-                    node = node.next 
-        else:
-            return self.data[index]        
+                    node = node.next       
         return None
         
     def resize(self, new_capacity):
@@ -196,7 +191,9 @@ if __name__ == "__main__":
     ht.put("line_10", "Long time the manxome foe he sought--")
     ht.put("line_11", "So rested he by the Tumtum tree")
     ht.put("line_12", "And stood awhile in thought.")
-    ht.delete("line_6")
+    # ht.put("line_13", "Adn doost awhile in thought.")
+    # print(ht.get("line_13"))
+    ht.delete("line_11")
 
     print("")
 
