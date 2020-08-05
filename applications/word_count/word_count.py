@@ -1,5 +1,15 @@
 def word_count(s):
-    # Your code here
+    d = {}
+    ignored = ['"', ':', ';', ',', '.', '-','+','=', "'\'",'|','[',']','{', '}', '(', ')',' *', '^', '&']
+    words = s.split()
+    for w in words:
+        for k in ignored:
+            w = w.replace(k,"")
+        w = w.lower()
+        if w not in d:
+            d[w] = 0
+        d[w] += 1
+    return d
 
 
 
