@@ -104,9 +104,11 @@ class HashTable:
 
         Implement this.
         """
+        #Day 2
         index = self.hash_index(key)
         #entry = self.data[index]
         #cur = self.head 
+        self.slots += 1
         if self.data[index] is None:
             self.data[index] = HashTableEntry(key, value)
         else:
@@ -123,7 +125,7 @@ class HashTable:
                 else: 
                     node.next = HashTableEntry(key, value)
                     return
-        self.slots += 1
+        
       
     def delete(self, key):
         """
@@ -133,10 +135,13 @@ class HashTable:
 
         Implement this.
         """
-    
+        #Day 1:
+        #self.data[index] = HashTableEntry(key, value)
+        #Day 2 
         index = self.hash_index(key)   
         node = self.data[index]
             #check that current key is equal to key 
+        self.slots -= 1 
         while node:
             if node.key == key:
                 node.value = None
@@ -144,7 +149,7 @@ class HashTable:
             else:
                 if node.next is not None:
                     node = node.next  
-        self.slots -= 1        
+               
         return None 
         # else:
         #     print("Key could not be found")
@@ -172,7 +177,7 @@ class HashTable:
 
         Implement this.
         """
-        # Your code here
+        
 
 
 
