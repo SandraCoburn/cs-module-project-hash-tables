@@ -1,4 +1,4 @@
-import re
+import re #regular expressions
 def word_count(s):
     d = {}
     #ignored = ['"', ':', ';', ',', '.', '-','+','=','\\','|','[',']','{', '}', '(', ')','*', '^', '&', '/']
